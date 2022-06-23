@@ -25,16 +25,19 @@ func getPostingClient() (*reddit.Client, error) {
 }
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal(err)
-	}
+	environment := os.Getenv("ENVIRONMENT")
 
+	if environment == "development" {
+		if err := godotenv.Load(); err != nil {
+			log.Fatal(err)
+		}
+	}
+	println("uh")
 	// client, err := getPostingClient()
 	// client, err := reddit.NewReadonlyClient()
-	if err != nil {
-		log.Fatal("could not generate client: %w", err)
-	}
+	// if err != nil {
+	// 	log.Fatal("could not generate client: %w", err)
+	// }
 
 	http.HandleFunc("/webhook", func(w http.ResponseWriter, r *http.Request) {
 
@@ -44,7 +47,7 @@ func main() {
 		println(legit)
 		// if legit {
 		// 	// post(client, title, url)
-		// 	testGet(client)
+		// testGet(client)
 		// }
 
 	})

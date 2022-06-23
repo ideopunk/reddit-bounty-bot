@@ -1,0 +1,1 @@
+This server includes a webhook address to catch new bounties posted to [viaprize.org](https://www.viaprize.org/). It then crossposts these to the [`r/bounty`](https://www.reddit.com/r/Bounty/) subreddit.

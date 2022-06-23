@@ -1,27 +1,14 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/vartanbeno/go-reddit/v2/reddit"
 )
-
-var ctx = context.Background()
-
-func post(client *reddit.Client, title string, URL string) (string, error) {
-	post, _, err := client.Post.SubmitLink(ctx,
-		reddit.SubmitLinkRequest{Subreddit: "test", Title: title, URL: URL})
-
-	if err != nil {
-		return "", fmt.Errorf("could not submit post %v successfully: %w", title, err)
-	}
-
-	return post.URL, nil
-}
 
 func getPostingClient() (*reddit.Client, error) {
 	ID := os.Getenv("REDDIT_APP_ID")
@@ -36,6 +23,7 @@ func getPostingClient() (*reddit.Client, error) {
 	}
 	return client, nil
 }
+
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -43,19 +31,22 @@ func main() {
 	}
 
 	// client, err := getPostingClient()
-
-	client, _ := reddit.NewReadonlyClient()
-	posts, _, err := client.Subreddit.TopPosts(context.Background(), "test", &reddit.ListPostOptions{
-		ListOptions: reddit.ListOptions{
-			Limit: 5,
-		}, Time: "all"})
-
+	// client, err := reddit.NewReadonlyClient()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("could not generate client: %w", err)
 	}
-	fmt.Printf("Received %d posts.\n", len(posts))
-	for i, post := range posts {
-		println(i)
-		fmt.Printf(post.Title)
-	}
+
+	http.HandleFunc("/webhook", func(w http.ResponseWriter, r *http.Request) {
+
+		// title, url, legit := "", "", false
+
+		legit := true
+		println(legit)
+		// if legit {
+		// 	// post(client, title, url)
+		// 	testGet(client)
+		// }
+
+	})
+	http.ListenAndServe(":3000", nil)
 }

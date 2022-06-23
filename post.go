@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/vartanbeno/go-reddit/v2/reddit"
 )
@@ -21,18 +20,20 @@ func post(client *reddit.Client, title string, URL string) (string, error) {
 	return post.URL, nil
 }
 
-func testGet(client *reddit.Client) {
+func testGet(client *reddit.Client) error {
 	posts, _, err := client.Subreddit.TopPosts(context.Background(), "test", &reddit.ListPostOptions{
 		ListOptions: reddit.ListOptions{
 			Limit: 5,
 		}, Time: "all"})
 
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("could not get top posts: %w", err)
 	}
 	fmt.Printf("Received %d posts.\n", len(posts))
 	for i, post := range posts {
 		println(i)
 		fmt.Printf(post.Title)
 	}
+
+	return nil
 }

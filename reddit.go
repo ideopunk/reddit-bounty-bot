@@ -3,11 +3,27 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/vartanbeno/go-reddit/v2/reddit"
 )
 
 var ctx = context.Background()
+
+func getRedditPostingClient() (*reddit.Client, error) {
+	ID := os.Getenv("REDDIT_APP_ID")
+	secret := os.Getenv("REDDIT_APP_SECRET")
+	username := os.Getenv("REDDIT_USERNAME")
+	password := os.Getenv("REDDIT_PASSWORD")
+
+	credentials := reddit.Credentials{ID: ID, Secret: secret, Username: username, Password: password}
+	client, err := reddit.NewClient(credentials)
+	if err != nil {
+		return nil, fmt.Errorf("could not generate reddit client: %w", err)
+	}
+
+	return client, nil
+}
 
 func post(client *reddit.Client, title string, URL string) (string, error) {
 	post, _, err := client.Post.SubmitLink(ctx,

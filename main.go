@@ -1,29 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/vartanbeno/go-reddit/v2/reddit"
 )
-
-func getPostingClient() (*reddit.Client, error) {
-	ID := os.Getenv("REDDIT_APP_ID")
-	secret := os.Getenv("REDDIT_APP_SECRET")
-	username := os.Getenv("REDDIT_USERNAME")
-	password := os.Getenv("REDDIT_PASSWORD")
-
-	credentials := reddit.Credentials{ID: ID, Secret: secret, Username: username, Password: password}
-	client, err := reddit.NewClient(credentials)
-	if err != nil {
-		return nil, fmt.Errorf("could not generate reddit client: %w", err)
-	}
-
-	return client, nil
-}
 
 func main() {
 	environment := os.Getenv("ENVIRONMENT")
@@ -34,27 +16,26 @@ func main() {
 		}
 	}
 
-	client, err := getPostingClient()
-	// client, err := reddit.NewReadonlyClient()
+	// GET
+	campaigns, err := getCampaigns()
+
+	if err != nil {
+		log.Fatal("could not get campaigns: %w", err)
+	}
+
+	println(campaigns)
+
+	// POST
+	client, err := getRedditPostingClient()
+
+	// if err := post(client, campaign.Name + ": " + campaign.Blurb, url); err != nil {
+	if err := testGet(client); err != nil {
+		log.Fatal("could not get posts: %w", err)
+	}
 
 	if err != nil {
 		log.Fatal("could not generate client: %w", err)
 	}
 
-	http.HandleFunc("/webhook", func(w http.ResponseWriter, r *http.Request) {
-
-		// title, url, legit := "", "", false
-
-		legit := true
-		if legit {
-			// 	// post(client, title, url)
-			if err := testGet(client); err != nil {
-				log.Fatal("could not get posts: %w", err)
-			}
-		}
-
-		fmt.Fprintf(w, "nice!\n")
-
-	})
-	http.ListenAndServe(":3000", nil)
+	println("success")
 }

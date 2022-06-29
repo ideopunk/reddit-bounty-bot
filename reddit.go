@@ -25,15 +25,23 @@ func getRedditPostingClient() (*reddit.Client, error) {
 	return client, nil
 }
 
-func post(client *reddit.Client, title string, URL string) (string, error) {
-	post, _, err := client.Post.SubmitLink(ctx,
-		reddit.SubmitLinkRequest{Subreddit: "test", Title: title, URL: URL})
+func post(client *reddit.Client, posts []Post) ([]string, error) {
+	urls := make([]string, len(posts))
 
-	if err != nil {
-		return "", fmt.Errorf("could not submit post %v successfully: %w", title, err)
+	for _, post := range posts {
+		fmt.Printf("%+v\n", post)
+
+		// publishedPost, _, err := client.Post.SubmitLink(ctx,
+		// 	reddit.SubmitLinkRequest{Subreddit: "test", Title: post.Title, URL: post.URL})
+
+		// if err != nil {
+		// 	return nil, fmt.Errorf("could not submit post %v successfully: %w. did however post successfully here: %v", post.Title, err, urls)
+		// }
+
+		// urls = append(urls, publishedPost.URL)
 	}
 
-	return post.URL, nil
+	return urls, nil
 }
 
 func testGet(client *reddit.Client) error {
@@ -46,10 +54,6 @@ func testGet(client *reddit.Client) error {
 		return fmt.Errorf("could not get top posts: %w", err)
 	}
 	fmt.Printf("Received %d posts.\n", len(posts))
-	for i, post := range posts {
-		println(i)
-		fmt.Printf(post.Title)
-	}
 
 	return nil
 }

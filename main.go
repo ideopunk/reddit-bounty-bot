@@ -23,19 +23,19 @@ func main() {
 		log.Fatal("could not get campaigns: %w", err)
 	}
 
-	println(campaigns)
-
 	// POST
 	client, err := getRedditPostingClient()
 
-	// if err := post(client, campaign.Name + ": " + campaign.Blurb, url); err != nil {
-	if err := testGet(client); err != nil {
+	if err != nil {
+		log.Fatal("could not generate posting client: %w", err)
+	}
+
+	url, err := post(client, campaigns)
+
+	if err != nil {
 		log.Fatal("could not get posts: %w", err)
 	}
 
-	if err != nil {
-		log.Fatal("could not generate client: %w", err)
-	}
-
 	println("success")
+	println(url)
 }

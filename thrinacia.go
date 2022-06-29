@@ -34,7 +34,8 @@ func getCampaigns() ([]Post, error) {
 		return nil, fmt.Errorf("could not filter campaigns: %w", err)
 	}
 
-	posts := make([]Post, len(filteredCampaigns))
+	println(len(filteredCampaigns))
+	posts := make([]Post, 0)
 	for _, camp := range filteredCampaigns {
 		posts = append(posts, mapCampaign(camp))
 	}
@@ -64,5 +65,5 @@ func filterCampaigns(campaigns []*Campaign) ([]*Campaign, error) {
 }
 
 func mapCampaign(campaign *Campaign) Post {
-	return Post{Title: campaign.Name, URL: campaign.Blurb}
+	return Post{Title: campaign.Name + ": " + campaign.Blurb, URL: "https://www.viaprize.org/" + campaign.URIPaths[0].Path}
 }

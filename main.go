@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -23,6 +24,7 @@ func main() {
 		log.Fatal("could not get campaigns: %w", err)
 	}
 
+	println(len(campaigns))
 	// POST
 	client, err := getRedditPostingClient()
 
@@ -37,5 +39,5 @@ func main() {
 	}
 
 	println("success")
-	println(url)
+	fmt.Printf("%v", url)
 }

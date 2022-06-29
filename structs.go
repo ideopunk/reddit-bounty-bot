@@ -1,5 +1,22 @@
 package main
 
+type URIPath struct {
+	ID        int    `json:"id"`
+	URIPathID int    `json:"uri_path_id"`
+	Path      string `json:"path"`
+	// "uri_paths": [
+	// 	{
+	// 	  "id": 56,
+	// 	  "uri_path_id": 56,
+	// 	  "path": "campaign/31/us-based-transparent-bank-accounts",
+	// 	  "path_text": null,
+	// 	  "disabled": false,
+	// 	  "created": "2021-10-18 17:00:37.084925+14",
+	// 	  "modified": "2022-01-13 08:27:21.724613+14"
+	// 	}
+	//   ],
+}
+
 type Campaign struct {
 	Description             string  `json:"description"`               // // Campaign Description
 	CurrencyId              int     `json:"currency_id"`               //	Campaign currency used ... string??
@@ -33,11 +50,12 @@ type Campaign struct {
 	// 11 = Cancelled
 	// 12 = Being Reviewed
 	// 13 = Not Funded
-	MaximumAllowedFundsRaised int    `json:"maximum_allowed_funds_raised"` // Max limit campaign can raise
-	EverPublished             bool   `json:"ever_published"`               // If Campaign has ever been published
-	Name                      string `json:"name"`                         // Campaign Name
-	FundingGoal               int    `json:"funding_goal"`                 // Campaign Funding Goal
-	RaiseModeID               int    `json:"raise_mode_id"`
+	MaximumAllowedFundsRaised int       `json:"maximum_allowed_funds_raised"` // Max limit campaign can raise
+	EverPublished             bool      `json:"ever_published"`               // If Campaign has ever been published
+	Name                      string    `json:"name"`                         // Campaign Name
+	FundingGoal               int       `json:"funding_goal"`                 // Campaign Funding Goal
+	RaiseModeID               int       `json:"raise_mode_id"`
+	URIPaths                  []URIPath `json:"uri_paths"`
 }
 
 type Post struct {

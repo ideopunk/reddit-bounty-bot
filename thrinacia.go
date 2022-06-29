@@ -46,18 +46,23 @@ func filterCampaigns(campaigns []*Campaign) ([]*Campaign, error) {
 	helperArr := campaigns
 	campaigns = campaigns[:0]
 	for _, camp := range helperArr {
-
+		// if campaign is not approved, skip
+		if camp.EntryStatusID != 2 {
+			continue
+		}
 		date, err := time.Parse("2006-01-02 15:04:05-07", camp.Starts)
 		if err != nil {
 			return nil, fmt.Errorf("could not parse campaign date %v: %w", camp.Starts, err)
 		}
 
-		yesterday := time.Now().Add(-24 * time.Hour * 140)
+		yesterday := time.Now().Add(-24 * time.Hour)
 
-		// if this campaign starts in the last 24 hours, include it.
-		if date.After(yesterday) {
-			campaigns = append(campaigns, camp)
+		// if this campaign didn't start in the last 24 hours, skip
+		if !date.After(yesterday) {
+			continue
 		}
+
+		campaigns = append(campaigns, camp)
 	}
 
 	return campaigns, nil

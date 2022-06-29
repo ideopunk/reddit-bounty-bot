@@ -31,14 +31,14 @@ func post(client *reddit.Client, posts []Post) ([]string, error) {
 	for _, post := range posts {
 		fmt.Printf("%+v\n", post)
 
-		// publishedPost, _, err := client.Post.SubmitLink(ctx,
-		// 	reddit.SubmitLinkRequest{Subreddit: "test", Title: post.Title, URL: post.URL})
+		publishedPost, _, err := client.Post.SubmitLink(ctx,
+			reddit.SubmitLinkRequest{Subreddit: "test", Title: post.Title, URL: post.URL})
 
-		// if err != nil {
-		// 	return nil, fmt.Errorf("could not submit post %v successfully: %w. did however post successfully here: %v", post.Title, err, urls)
-		// }
+		if err != nil {
+			return nil, fmt.Errorf("could not submit post %v successfully: %w. did however post successfully here: %v", post.Title, err, urls)
+		}
 
-		// urls = append(urls, publishedPost.URL)
+		urls = append(urls, publishedPost.URL)
 	}
 
 	return urls, nil
